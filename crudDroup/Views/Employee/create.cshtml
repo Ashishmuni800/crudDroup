@@ -1,0 +1,100 @@
+﻿@model crudDroup.Models.ViewModel.CreateAll
+
+<form method="post" asp-action="Create" asp-controller="Employee">
+    <div class="form-group row">
+        <label for="inputFirstName" class="col-sm-2 col-form-label">FirstName</label>
+        <div class="col-sm-10">
+            <input type="text" class="form-control" id="inputFirstName" name="FirstName">
+        </div>
+    </div>
+    <div class="form-group row">
+        <label for="inputLastName" class="col-sm-2 col-form-label">LastName</label>
+        <div class="col-sm-10">
+            <input type="text" class="form-control" id="inputLastName" name="LastName">
+        </div>
+    </div>
+    <div class="form-group row">
+        <label for="inputGender" class="col-sm-2 col-form-label">Gender</label>
+        <div class="form-check form-check-inline">
+            <input class="form-check-input" type="radio" name="Gender" id="inlineRadio1" value="Male">
+            <label class="form-check-label" for="inlineRadio1">Male</label>
+        </div>
+        <div class="form-check form-check-inline">
+            <input class="form-check-input" type="radio" name="Gender" id="inlineRadio1" value="Femal">
+            <label class="form-check-label" for="inlineRadio1">Female</label>
+        </div>
+    </div>
+    <div class="form-group row">
+        <label for="inputLanguage" class="col-sm-2 col-form-label">Language</label>
+        <div class="form-check form-check-inline">
+            <input class="form-check-input" type="checkbox" name="Language" id="inlineRadio1" value="Hindi">
+            <label class="form-check-label" for="inlineRadio1">Hindi</label>
+        </div>
+        <div class="form-check form-check-inline">
+            <input class="form-check-input" type="checkbox" name="Language" id="inlineRadio1" value="English">
+            <label class="form-check-label" for="inlineRadio1">English</label>
+        </div>
+    </div>
+    <div class="form-group row">
+        <label for="inputCountry" class="col-sm-2 col-form-label">Country</label>
+        <div class="col-sm-10">
+            <select class="form-control country" asp-for="country">
+                <option>Select</option>
+            </select>
+        </div>
+    </div>
+    <div class="form-group row">
+        <label for="inputState" class="col-sm-2 col-form-label">State</label>
+        <div class="col-sm-10">
+            <select class="form-control state" asp-for="state">
+                <option>Select</option>
+            </select>
+        </div>
+    </div>
+    <div class="form-group row">
+        <label for="inputCiry" class="col-sm-2 col-form-label">City</label>
+        <div class="col-sm-10">
+            <select class="form-control city" asp-for="city">
+                <option>Select</option>
+            </select>
+        </div>
+    </div>
+    <div class="form-group">
+        <button type="submit" class="btn btn-primary">Submit</button>
+    </div>
+</form>
+<script src="~/lib/jquery/jquery-3.6.0.min.js"></script>
+<script>
+  $(document).ready(function () {
+        LoadCountry()
+        $(".country").change(function () {
+            var id = $(this).val();
+            $(".state").empty();
+            $(".state").append("<option>select</option>")
+            $.get('@Url.Action("GetStates", "Employee")', { "Id": id }, function (Result) {
+            console.log(Result)
+            $.each(Result, function (i, data) {
+                $(".state").append("<option value=" + data.id + ">" + data.s_Name+"</option>")
+            })
+            })
+            })
+            $(".state").change(function () {
+            var id = $(this).val();
+            $(".city").empty();
+            $(".city").append("<option>select</option>")
+            $.get('@Url.Action("GetCities", "Employee")', { "Id": id }, function (Result) {
+            console.log(Result)
+            $.each(Result, function (i, data) {
+                $(".city").append("<option value=" + data.id + ">" + data.cName+"</option>")
+            })
+            })
+            })
+            })
+            function LoadCountry() {
+            $.get('@Url.Action("GetCountries", "Employee")', function (Result) {
+                $.each(Result, function (i, data) {
+                    $(".country").append("<option value=" + data.id + ">" + data.c_Name + "</option>")
+            })
+            })
+            }
+</script>
